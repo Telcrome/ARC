@@ -175,33 +175,15 @@ function loadTaskFromFile(e) {
 
 function randomTask() {
     var subset = "training";
-    $.getJSON("https://api.github.com/repos/fchollet/ARC/contents/data/" + subset, function (tasks) {
-        var task_index = Math.floor(Math.random() * tasks.length)
-        var task = tasks[task_index];
-        $.getJSON(task["download_url"], function (json) {
-            try {
-                train = json['train'];
-                test = json['test'];
-            } catch (e) {
-                errorMsg('Bad file format');
-                return;
-            }
-            loadJSONTask(train, test);
-            //$('#load_task_file_input')[0].value = "";
-            infoMsg("Loaded task training/" + task["name"]);
-            display_task_name(task['name'], task_index, tasks.length);
-        })
-            .error(function () {
-                errorMsg('Error loading task');
-            });
-    })
-        .error(function () {
-            errorMsg('Error loading task list');
-        });
+    load_rnd_task(subset);
 }
 
 function randomTask_validation() {
     var subset = "evaluation";
+    load_rnd_task(subset);
+}
+
+function load_rnd_task(subset) {
     $.getJSON("https://api.github.com/repos/fchollet/ARC/contents/data/" + subset, function (tasks) {
         var task_index = Math.floor(Math.random() * tasks.length)
         var task = tasks[task_index];
@@ -215,7 +197,7 @@ function randomTask_validation() {
             }
             loadJSONTask(train, test);
             //$('#load_task_file_input')[0].value = "";
-            infoMsg("Loaded task training/" + task["name"]);
+            infoMsg(`Loaded task ${subset}/` + task["name"]);
             display_task_name(task['name'], task_index, tasks.length);
         })
             .error(function () {
