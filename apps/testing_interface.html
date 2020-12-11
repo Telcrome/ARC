@@ -53,6 +53,10 @@
                     <input type="file" id="load_task_file_input" class="load_task" style="display: none;" />
                     <!-- <input type="button" value="Browse..."
                         onclick="document.getElementById('load_task_file_input').click();" /> -->
+                    <button onclick="load_task_by_prompt('training')" id="load_task_prompt"> Load training task by
+                        prompt </button>
+                    <button onclick="load_task_by_prompt('evaluation')" id="load_task_prompt"> Load validation task by
+                        prompt </button>
                     <button onclick="randomTask()" id="random_task_btn"> Random training task </button>
                     <button onclick="randomTask_validation()" id="random_task_btn_val"> Random validation task </button>
                     <p>

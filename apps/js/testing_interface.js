@@ -187,6 +187,44 @@ function load_rnd_task(subset) {
     $.getJSON("https://api.github.com/repos/fchollet/ARC/contents/data/" + subset, function (tasks) {
         var task_index = Math.floor(Math.random() * tasks.length)
         var task = tasks[task_index];
+        console.log(task["name"]);
+        $.getJSON(task["download_url"], function (json) {
+            try {
+                train = json['train'];
+                test = json['test'];
+            } catch (e) {
+                errorMsg('Bad file format');
+                return;
+            }
+            loadJSONTask(train, test);
+            //$('#load_task_file_input')[0].value = "";
+            infoMsg(`Loaded task ${subset}/` + task["name"]);
+            display_task_name(task['name'], task_index, tasks.length);
+        })
+            .error(function () {
+                errorMsg('Error loading task');
+            });
+    })
+        .error(function () {
+            errorMsg('Error loading task list');
+        });
+}
+
+function load_task_by_prompt(subset) {
+    let task_name = prompt("Name of the task?")
+    $.getJSON("https://api.github.com/repos/fchollet/ARC/contents/data/" + subset, function (tasks) {
+        // var task_index = Math.floor(Math.random() * tasks.length)
+        let task = tasks[0];
+        let task_index = 0;
+        for (let index = 0; index < tasks.length; index++) {
+            task = tasks[index];
+            task_index = index;
+            // console.log(task);
+            if (task["name"].includes(task_name)) {
+                break;
+            }
+        }
+        console.log(task["name"]);
         $.getJSON(task["download_url"], function (json) {
             try {
                 train = json['train'];
